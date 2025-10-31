@@ -21,7 +21,7 @@ spring:
         format_sql: true
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: checkin-service
       auto-offset-reset: earliest
@@ -87,3 +87,9 @@ app:
       email-dlq: email-dlq
   batch:
     processing-time: "0 30 22 * * ?"
+  legacy:
+    api:
+      url: http://localhost:8084/api/legacy/report  # for external API mocking
+    email:
+      service:
+        url: http://localhost:8084/api/email/send    # for external API mocking
