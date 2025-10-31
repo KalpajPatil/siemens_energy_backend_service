@@ -8,6 +8,8 @@ import com.siemens.clock.model.ShiftStatus;
 import com.siemens.clock.model.WorkShift;
 import com.siemens.clock.repository.WorkShiftRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.Optional;
 @Transactional
 public class AttendanceService {
 
+    private static final Logger log = LoggerFactory.getLogger(AttendanceService.class);
     private final WorkShiftRepository workShiftRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -62,7 +65,7 @@ public class AttendanceService {
         // Find active shift
         Optional<WorkShift> activeShift = workShiftRepository.findByEmployeeIdAndStatus(
                 request.getEmployeeId(), ShiftStatus.ACTIVE);
-
+        log.info("inside handleCheckOut");
         if (activeShift.isEmpty()) {
             throw new AttendanceException("Employee " + request.getEmployeeId() + " is not checked in");
         }
@@ -73,7 +76,7 @@ public class AttendanceService {
         // Calculate hours worked
         Duration duration = Duration.between(shift.getStartTime(), endTime);
         double hoursWorked = duration.toMinutes() / 60.0;
-
+        log.info("hours worked = {}",hoursWorked);
         // Update shift
         shift.setEndTime(endTime);
         shift.setHoursWorked(hoursWorked);
@@ -86,6 +89,7 @@ public class AttendanceService {
                 updated.getEmployeeId(),
                 updated.getHoursWorked()
         );
+        log.info("check-out event = {}", event.getEventId());
 
         kafkaTemplate.send("check-out-completed", event);
 
