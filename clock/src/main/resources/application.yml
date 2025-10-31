@@ -1,0 +1,89 @@
+# src/main/resources/application.yml
+spring:
+  application:
+    name: clock
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/checkin_db
+    username: postgres
+    password: password
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: checkin-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    listener:
+      missing-topics-fatal: false
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      legacy-api:
+        register-health-indicator: true
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        minimum-number-of-calls: 5
+      email-service:
+        register-health-indicator: true
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        minimum-number-of-calls: 5
+
+  retry:
+    instances:
+      legacy-api:
+        max-attempts: 3
+        wait-duration: 2s
+      email-service:
+        max-attempts: 2
+        wait-duration: 1s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.siemens.clock: INFO
+    org.springframework.kafka: INFO
+
+server:
+  port: 8084
+
+app:
+  kafka:
+    topics:
+      check-out-completed: check-out-completed
+      legacy-dlq: check-out-dlq
+      email-dlq: email-dlq
+  batch:
+    processing-time: "0 30 22 * * ?"
