@@ -34,26 +34,26 @@ public class BatchService {
 
     @Scheduled(cron = "${app.batch.processing-time:0 30 22 * * ?}")
     public void processUnreportedShifts() {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        log.info("Starting batch processing for date: {}", yesterday);
+        //LocalDate yesterday = LocalDate.now().minusDays(1);
+        log.info("Starting batch processing for date: {}", LocalDate.now());
 
-        // Process unreported legacy shifts
-        List<WorkShift> unreportedShifts = workShiftRepository.findUnreportedShiftsByDate(yesterday);
+        // Process all unreported legacy shifts regardless of date
+        List<WorkShift> unreportedShifts = workShiftRepository.findAllUnreportedShifts();
         log.info("Found {} unreported shifts for legacy system", unreportedShifts.size());
 
         for (WorkShift shift : unreportedShifts) {
             processShiftWithRetry(shift);
         }
 
-        // Process unsent emails
-        List<WorkShift> unsentEmailShifts = workShiftRepository.findUnsentEmailShiftsByDate(yesterday);
+        // Process all unsent emails regardless of date
+        List<WorkShift> unsentEmailShifts = workShiftRepository.findAllUnsentEmailShifts();
         log.info("Found {} shifts with unsent emails", unsentEmailShifts.size());
 
         for (WorkShift shift : unsentEmailShifts) {
             sendEmailWithRetry(shift);
         }
 
-        log.info("Batch processing completed for date: {}", yesterday);
+        log.info("Batch processing completed for date: {}", LocalDate.now());
     }
 
     private void processShiftWithRetry(WorkShift shift) {

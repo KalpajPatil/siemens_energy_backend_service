@@ -17,11 +17,11 @@ public interface WorkShiftRepository extends JpaRepository<WorkShift, UUID> {
 
     Optional<WorkShift> findByEmployeeIdAndStatus(String employeeId, ShiftStatus status);
 
-    @Query("SELECT ws FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.reportedToLegacy = false AND DATE(ws.endTime) = :date")
-    List<WorkShift> findUnreportedShiftsByDate(@Param("date") LocalDate date);
+    @Query("SELECT ws FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.reportedToLegacy = false")
+    List<WorkShift> findAllUnreportedShifts();
 
-    @Query("SELECT ws FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.emailSent = false AND DATE(ws.endTime) = :date")
-    List<WorkShift> findUnsentEmailShiftsByDate(@Param("date") LocalDate date);
+    @Query("SELECT ws FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.emailSent = false")
+    List<WorkShift> findAllUnsentEmailShifts();
 
     @Query("SELECT COUNT(ws) FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.reportedToLegacy = false AND DATE(ws.endTime) = :date")
     long countUnreportedShiftsByDate(@Param("date") LocalDate date);
