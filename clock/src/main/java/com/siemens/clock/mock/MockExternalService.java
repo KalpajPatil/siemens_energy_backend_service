@@ -1,17 +1,20 @@
 package com.siemens.clock.mock;
 
+import com.siemens.clock.repository.WorkShiftRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-@Service
+@RestController
 public class MockExternalService {
 
     private static final Logger log = LoggerFactory.getLogger(MockExternalService.class);

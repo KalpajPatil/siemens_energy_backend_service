@@ -17,6 +17,8 @@ public interface WorkShiftRepository extends JpaRepository<WorkShift, UUID> {
 
     Optional<WorkShift> findByEmployeeIdAndStatus(String employeeId, ShiftStatus status);
 
+    Optional<WorkShift> findByEmployeeId(String id);
+
     @Query("SELECT ws FROM WorkShift ws WHERE ws.status = 'COMPLETED' AND ws.reportedToLegacy = false")
     List<WorkShift> findAllUnreportedShifts();
 

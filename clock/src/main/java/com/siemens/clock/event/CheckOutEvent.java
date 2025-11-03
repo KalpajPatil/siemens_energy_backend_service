@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CheckOutEvent {
 
     private String eventId;
-    private String workShiftId;
+    private UUID workShiftId;
     private String employeeId;
     private Double hoursWorked;
     private Instant timestamp;
@@ -24,7 +24,7 @@ public class CheckOutEvent {
         this.timestamp = Instant.now();
     }
 
-    public CheckOutEvent(String workShiftId, String employeeId, Double hoursWorked) {
+    public CheckOutEvent(UUID workShiftId, String employeeId, Double hoursWorked) {
         this();
         this.workShiftId = workShiftId;
         this.employeeId = employeeId;

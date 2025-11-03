@@ -2,6 +2,8 @@ package com.siemens.clock.service;
 
 import com.siemens.clock.event.CheckOutEvent;
 import com.siemens.clock.exception.EmailServiceException;
+import com.siemens.clock.model.WorkShift;
+import com.siemens.clock.repository.WorkShiftRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
@@ -14,9 +16,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class EmailService {
+
+    @Autowired
+    private WorkShiftRepository workShiftRepository;
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     private final RestTemplate restTemplate;
@@ -55,7 +61,11 @@ public class EmailService {
         if (body != null && !"SENT".equals(body.get("status"))) {
             throw new EmailServiceException("Email service failed: " + body.get("message"));
         }
-
+        Optional<WorkShift> shift = workShiftRepository.findById(event.getWorkShiftId());
+        if(shift.isPresent()){
+            shift.get().setEmailSent(true);
+            workShiftRepository.save(shift.get());
+        }
         log.info("Successfully sent email to employee: {}", event.getEmployeeId());
     }
 

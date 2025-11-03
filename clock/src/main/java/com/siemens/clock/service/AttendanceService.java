@@ -85,7 +85,7 @@ public class AttendanceService {
 
         // Publish check-out event
         CheckOutEvent event = new CheckOutEvent(
-                updated.getId().toString(),
+                updated.getId(),
                 updated.getEmployeeId(),
                 updated.getHoursWorked()
         );

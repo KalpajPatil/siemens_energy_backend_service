@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/checkin_db
     username: postgres
-    password: password
+    password: root
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
@@ -21,7 +21,7 @@ spring:
         format_sql: true
 
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: checkin-service
       auto-offset-reset: earliest
@@ -40,18 +40,22 @@ resilience4j:
     instances:
       legacy-api:
         register-health-indicator: true
+        register-metrics: true
         sliding-window-size: 10
         failure-rate-threshold: 50
         wait-duration-in-open-state: 30s
         permitted-number-of-calls-in-half-open-state: 3
         minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
       email-service:
         register-health-indicator: true
+        register-metrics: true
         sliding-window-size: 10
         failure-rate-threshold: 50
         wait-duration-in-open-state: 30s
         permitted-number-of-calls-in-half-open-state: 3
         minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
 
   retry:
     instances:
@@ -66,10 +70,45 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics
+        include: health,info,metrics,prometheus,circuitbreakers,env,loggers
+    enabled-by-default: true
+
   endpoint:
     health:
       show-details: always
+      show-components: always
+
+  health:
+    circuitbreakers:
+      enabled: true
+    resilience4j:
+      enabled: true
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        step: 1m
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+    enable:
+      jvm: true
+      logback: true
+      system: true
+      process: true
+      kafka: true
+      resilience4j: true
+
+    tracing:
+      sampling:
+        probability: 1.0
+
+  logging:
+    level:
+      com.siemens.clock: INFO
+      org.springframework.kafka: INFO
+      io.micrometer: INFO
 
 logging:
   level:
@@ -93,3 +132,16 @@ app:
     email:
       service:
         url: http://localhost:8084/api/email/send    # for external API mocking
+
+micrometer:
+  observation:
+    enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles:
+        - 0.5
+        - 0.95
+        - 0.99

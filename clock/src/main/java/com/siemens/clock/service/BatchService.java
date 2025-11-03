@@ -92,7 +92,7 @@ public class BatchService {
 
     private com.siemens.clock.event.CheckOutEvent createEventFromShift(WorkShift shift) {
         return new com.siemens.clock.event.CheckOutEvent(
-                shift.getId().toString(),
+                shift.getId(),
                 shift.getEmployeeId(),
                 shift.getHoursWorked()
         );
