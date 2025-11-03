@@ -37,6 +37,7 @@ spring:
 
 resilience4j:
   circuitbreaker:
+    circuitBreakerAspectOrder: 2
     instances:
       legacy-api:
         register-health-indicator: true
@@ -47,6 +48,8 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 3
         minimum-number-of-calls: 5
         automatic-transition-from-open-to-half-open-enabled: true
+        ignoreExceptions:
+          - com.siemens.clock.exception.LegacySystemException
       email-service:
         register-health-indicator: true
         register-metrics: true
@@ -56,15 +59,22 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 3
         minimum-number-of-calls: 5
         automatic-transition-from-open-to-half-open-enabled: true
+        ignoreExceptions:
+          - com.siemens.clock.exception.EmailServiceException
 
   retry:
+    retryAspectOrder: 1
     instances:
       legacy-api:
+        retryExceptions:
+          - com.siemens.clock.exception.LegacySystemException
         max-attempts: 3
         wait-duration: 2s
       email-service:
+        retryExceptions:
+          - com.siemens.clock.exception.EmailServiceException
         max-attempts: 2
-        wait-duration: 1s
+        wait-duration: 2s
 
 management:
   endpoints:
@@ -104,17 +114,6 @@ management:
       sampling:
         probability: 1.0
 
-  logging:
-    level:
-      com.siemens.clock: INFO
-      org.springframework.kafka: INFO
-      io.micrometer: INFO
-
-logging:
-  level:
-    com.siemens.clock: INFO
-    org.springframework.kafka: INFO
-
 server:
   port: 8084
 
@@ -145,3 +144,61 @@ micrometer:
         - 0.5
         - 0.95
         - 0.99
+
+# ==================== LOGGING CONFIGURATION ====================
+logging:
+  # File-based logging
+  file:
+    name: logs/clock-service.log
+    max-size: 10MB
+    max-history: 7
+    total-size-cap: 100MB
+
+  # Logback pattern for files
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+  # Log levels - Detailed for debugging retry/circuit breaker
+  level:
+    # Application packages
+    com.siemens.clock: DEBUG
+
+    # Resilience4j - VERY IMPORTANT for retry logging
+    io.github.resilience4j: DEBUG
+    io.github.resilience4j.retry: TRACE
+    io.github.resilience4j.circuitbreaker: DEBUG
+
+    # Spring Retry
+    org.springframework.retry: DEBUG
+    org.springframework.cloud.context: DEBUG
+
+#    # Kafka
+#    org.springframework.kafka: DEBUG
+#    org.apache.kafka: WARN
+
+    # HTTP calls
+    org.springframework.web.client: DEBUG
+    org.apache.http: WARN
+
+#    # Database (optional - can be noisy)
+#    org.hibernate: WARN
+#    org.springframework.orm.jpa: WARN
+
+    # Micrometer metrics
+    io.micrometer: INFO
+
+    # Spring framework
+    org.springframework: INFO
+
+  # Logback configuration
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB
+
+# Separate appenders configuration (alternative approach)
+---
+# Optional: More detailed logback configuration
+# Create src/main/resources/logback-spring.xml for even more control

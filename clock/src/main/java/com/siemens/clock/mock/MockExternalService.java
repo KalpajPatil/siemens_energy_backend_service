@@ -28,8 +28,8 @@ public class MockExternalService {
 
         log.info("MOCK LEGACY: Reporting {} hours for employee {}", hoursWorked, employeeId);
 
-        // Simulate 20% failure rate for legacy system
-        if (random.nextInt(100) < 20) {
+        // Simulate 60% failure rate for legacy system
+        if (random.nextInt(100) < 60) {
             log.warn("MOCK LEGACY: Simulating failure for employee {}", employeeId);
             return ResponseEntity.status(503)
                     .body(Map.of("status", "ERROR", "message", "Legacy system temporarily unavailable"));
@@ -59,8 +59,8 @@ public class MockExternalService {
 
         log.info("MOCK EMAIL: Sending email to {} - {}", to, subject);
 
-        // Simulate 10% failure rate for email service
-        if (random.nextInt(100) < 10) {
+        // Simulate 50% failure rate for email service
+        if (random.nextInt(100) < 50) {
             log.warn("MOCK EMAIL: Simulating failure for {}", to);
             return ResponseEntity.status(503)
                     .body(Map.of("status", "FAILED", "message", "Email service temporarily unavailable"));

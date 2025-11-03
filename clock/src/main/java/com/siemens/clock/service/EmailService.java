@@ -36,7 +36,7 @@ public class EmailService {
         this.dlqService = dlqService;
     }
 
-    @CircuitBreaker(name = "email-service", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "email-service")
     @Retry(name = "email-service", fallbackMethod = "fallback")
     public void sendCheckOutEmail(CheckOutEvent event) {
         log.info("Sending email to employee: {}", event.getEmployeeId());

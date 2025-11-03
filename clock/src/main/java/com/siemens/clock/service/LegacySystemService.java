@@ -35,7 +35,7 @@ public class LegacySystemService {
         this.dlqService = dlqService;
     }
 
-    @CircuitBreaker(name = "legacy-api", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "legacy-api")
     @Retry(name = "legacy-api", fallbackMethod = "fallback")
     public void reportHoursWorked(CheckOutEvent event) {
         log.info("Reporting hours to legacy system for employee: {}", event.getEmployeeId());
