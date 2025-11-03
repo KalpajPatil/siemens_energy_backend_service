@@ -68,13 +68,19 @@ resilience4j:
       legacy-api:
         retryExceptions:
           - com.siemens.clock.exception.LegacySystemException
-        max-attempts: 3
-        wait-duration: 2s
+        max-attempts: 5
+        wait-duration: 1s
+        max-wait-duration: 30s
+        enableExponentialBackoff: true
+        exponential-backoff-multiplier: 2
       email-service:
         retryExceptions:
           - com.siemens.clock.exception.EmailServiceException
-        max-attempts: 2
-        wait-duration: 2s
+        max-attempts: 3
+        wait-duration: 500ms
+        max-wait-duration: 10s
+        enableExponentialBackoff: true
+        exponential-backoff-multiplier: 2
 
 management:
   endpoints:
