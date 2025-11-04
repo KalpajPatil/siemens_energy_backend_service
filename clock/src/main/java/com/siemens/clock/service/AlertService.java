@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-// Import the DlqMessage class from the DlqService
+
 import static com.siemens.clock.service.DlqService.DlqMessage;
 
 @Service
@@ -25,7 +25,7 @@ public class AlertService {
 
 
         IncidentAlert alert = new IncidentAlert(
-                "CRITICAL", // Severity level
+                "CRITICAL",
                 "Unrecoverable Failure in " + dlqMessage.failureSource,
                 String.format("Event ID %s for Employee %s failed all retries. Error: %s",
                         dlqMessage.originalEvent.getWorkShiftId(),

@@ -10,3 +10,9 @@
 2025-11-04 13:10:09.914 [ALERT] ERROR - Timestamp: 2025-11-04 13:10:09
 2025-11-04 13:10:09.914 [ALERT] ERROR - Metadata: {dlqTimestamp=1762258209908, employeeId=i9j1k3l5, source=EMAIL_SERVICE, workShiftId=e95abe2e-315c-43ab-8de7-4ff7b5c34e1e}
 2025-11-04 13:10:09.914 [ALERT] ERROR - ---------------------------------
+2025-11-04 14:39:31.098 [ALERT] ERROR - --- INCIDENT ALERT RAISED (CRITICAL) ---
+2025-11-04 14:39:31.104 [ALERT] ERROR - Title: Unrecoverable Failure in EMAIL_SERVICE
+2025-11-04 14:39:31.104 [ALERT] ERROR - Details: Event ID a8dbdf46-2702-450c-b57d-70532a36b41b for Employee q6r5s1t3 failed all retries. Error: Resilience fallback: Email service returned: 503 SERVICE_UNAVAILABLE
+2025-11-04 14:39:31.105 [ALERT] ERROR - Timestamp: 2025-11-04 14:39:31
+2025-11-04 14:39:31.105 [ALERT] ERROR - Metadata: {dlqTimestamp=1762263571085, workShiftId=a8dbdf46-2702-450c-b57d-70532a36b41b, source=EMAIL_SERVICE, employeeId=q6r5s1t3}
+2025-11-04 14:39:31.105 [ALERT] ERROR - ---------------------------------

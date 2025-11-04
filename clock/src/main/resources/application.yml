@@ -188,9 +188,9 @@ logging:
     org.springframework.retry: DEBUG
     org.springframework.cloud.context: DEBUG
 
-#    # Kafka
-#    org.springframework.kafka: DEBUG
-#    org.apache.kafka: WARN
+    # Kafka
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: WARN
 
     # HTTP calls
     org.springframework.web.client: DEBUG

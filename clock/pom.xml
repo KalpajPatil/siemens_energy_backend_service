@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.siemens</groupId>
 	<artifactId>clock</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>clock</name>
 	<description>Backend service for worker clock-in clock-out</description>
 	<url/>
@@ -93,10 +93,6 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <version>1.15.5</version>
         </dependency>
-        <!--<dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-actuator</artifactId>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
         <dependency>
             <groupId>org.mockito</groupId>

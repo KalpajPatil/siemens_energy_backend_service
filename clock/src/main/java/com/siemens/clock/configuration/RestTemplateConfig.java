@@ -17,7 +17,7 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
 
-        // 1. Define the custom error handler
+
         ResponseErrorHandler nonThrowingErrorHandler = new DefaultResponseErrorHandler() {
             @Override
             // The crucial override: tell RestTemplate *not* to throw an exception
@@ -29,12 +29,9 @@ public class RestTemplateConfig {
             // Note: We don't need to override handleError since hasError returns false.
         };
 
-        // 2. Apply the custom error handler using the RestTemplateBuilder
+
         return builder
                 .errorHandler(nonThrowingErrorHandler)
-                // Optional: You might want to add connection and read timeouts
-                // .setConnectTimeout(Duration.ofSeconds(5))
-                // .setReadTimeout(Duration.ofSeconds(10))
                 .build();
     }
 }

@@ -1,11 +1,9 @@
 package com.siemens.clock.mock;
 
-import com.siemens.clock.repository.WorkShiftRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,8 +57,8 @@ public class MockExternalService {
 
         log.info("MOCK EMAIL: Sending email to {} - {}", to, subject);
 
-        // Simulate 50% failure rate for email service
-        if (random.nextInt(100) < 50) {
+        // Simulate 10% failure rate for email service
+        if (random.nextInt(100) < 10) {
             log.warn("MOCK EMAIL: Simulating failure for {}", to);
             return ResponseEntity.status(503)
                     .body(Map.of("status", "FAILED", "message", "Email service temporarily unavailable"));
