@@ -68,6 +68,8 @@ resilience4j:
       legacy-api:
         retryExceptions:
           - com.siemens.clock.exception.LegacySystemException
+        ignoreExceptions:
+          - com.siemens.clock.exception.NonRetryableClientException
         max-attempts: 5
         wait-duration: 1s
         max-wait-duration: 30s
@@ -76,6 +78,8 @@ resilience4j:
       email-service:
         retryExceptions:
           - com.siemens.clock.exception.EmailServiceException
+        ignoreExceptions:
+          - com.siemens.clock.exception.NonRetryableClientException
         max-attempts: 3
         wait-duration: 500ms
         max-wait-duration: 10s
@@ -143,10 +147,10 @@ app:
     processing-time: "0 30 22 * * ?"
   legacy:
     api:
-      url: http://localhost:8084/api/legacy/report  # for external API mocking
-    email:
-      service:
-        url: http://localhost:8084/api/email/send    # for external API mocking
+      url: http://localhost:8084/api/legacy/report
+  email:
+    service:
+      url: http://localhost:8084/api/email/send
 
 micrometer:
   observation:
@@ -156,7 +160,7 @@ micrometer:
       prometheus:
         enabled: true
 
-# ==================== LOGGING CONFIGURATION ====================
+
 logging:
   # File-based logging
   file:
@@ -192,10 +196,6 @@ logging:
     org.springframework.web.client: DEBUG
     org.apache.http: WARN
 
-#    # Database (optional - can be noisy)
-#    org.hibernate: WARN
-#    org.springframework.orm.jpa: WARN
-
     # Micrometer metrics
     io.micrometer: INFO
 
@@ -208,8 +208,3 @@ logging:
       max-file-size: 10MB
       max-history: 7
       total-size-cap: 100MB
-
-# Separate appenders configuration (alternative approach)
----
-# Optional: More detailed logback configuration
-# Create src/main/resources/logback-spring.xml for even more control

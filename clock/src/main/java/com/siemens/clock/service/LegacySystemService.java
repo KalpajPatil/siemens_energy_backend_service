@@ -2,6 +2,7 @@ package com.siemens.clock.service;
 
 import com.siemens.clock.event.CheckOutEvent;
 import com.siemens.clock.exception.LegacySystemException;
+import com.siemens.clock.exception.NonRetryableClientException;
 import com.siemens.clock.model.WorkShift;
 import com.siemens.clock.repository.WorkShiftRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -50,6 +51,11 @@ public class LegacySystemService {
                 request,
                 Map.class
         );
+
+        //ignore client side errors 4xx
+        if (response.getStatusCode().is4xxClientError()) {
+            throw new NonRetryableClientException("Client error: " + response.getStatusCode());
+        }
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new LegacySystemException("Legacy API returned: " + response.getStatusCode());
