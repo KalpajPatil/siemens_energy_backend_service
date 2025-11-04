@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- Console Appender -->
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- File Appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/clock-service.log</file>
         <encoder>
@@ -21,19 +20,33 @@
         </rollingPolicy>
     </appender>
 
-    <!-- Resilience4j Specific Logger -->
+    <appender name="ALERT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/alert.log</file> <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ALERT] %-5level - %msg%n</pattern>
+    </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/alert-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
     <logger name="io.github.resilience4j" level="DEBUG" additivity="false">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <!-- Application Specific Logger -->
+    <logger name="com.siemens.clock.service.AlertService" level="ERROR" additivity="false">
+        <appender-ref ref="ALERT_FILE"/>
+    </logger>
+
     <logger name="com.siemens.clock" level="DEBUG" additivity="false">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <!-- Root Logger -->
     <root level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>

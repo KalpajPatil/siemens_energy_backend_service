@@ -3,12 +3,16 @@ package com.siemens.clock.service;
 import com.siemens.clock.event.CheckOutEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class DlqService {
+
+    @Autowired
+    private AlertService alertService;
 
     private static final Logger log = LoggerFactory.getLogger(DlqService.class);
 
@@ -23,6 +27,9 @@ public class DlqService {
 
         DlqMessage dlqMessage = new DlqMessage(event, errorMessage, "LEGACY_SYSTEM");
         kafkaTemplate.send("check-out-dlq", dlqMessage);
+
+        alertService.raiseIncidentAlert(dlqMessage);
+
     }
 
     public void sendToEmailDlq(CheckOutEvent event, String errorMessage) {
@@ -30,9 +37,11 @@ public class DlqService {
 
         DlqMessage dlqMessage = new DlqMessage(event, errorMessage, "EMAIL_SERVICE");
         kafkaTemplate.send("email-dlq", dlqMessage);
+
+        alertService.raiseIncidentAlert(dlqMessage);
     }
 
-    private static class DlqMessage {
+    public static class DlqMessage {
         public final CheckOutEvent originalEvent;
         public final String errorMessage;
         public final String failureSource;

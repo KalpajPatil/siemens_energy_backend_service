@@ -1,0 +1,12 @@
+2025-11-04 13:09:13.415 [ALERT] ERROR - --- INCIDENT ALERT RAISED (CRITICAL) ---
+2025-11-04 13:09:13.416 [ALERT] ERROR - Title: Unrecoverable Failure in LEGACY_SYSTEM
+2025-11-04 13:09:13.416 [ALERT] ERROR - Details: Event ID 09ca6955-0b9f-4100-b615-323b441d0801 for Employee m7n8o2p4 failed all retries. Error: Resilience fallback: Legacy API returned: 503 SERVICE_UNAVAILABLE
+2025-11-04 13:09:13.416 [ALERT] ERROR - Timestamp: 2025-11-04 13:09:13
+2025-11-04 13:09:13.416 [ALERT] ERROR - Metadata: {dlqTimestamp=1762258153392, employeeId=m7n8o2p4, source=LEGACY_SYSTEM, workShiftId=09ca6955-0b9f-4100-b615-323b441d0801}
+2025-11-04 13:09:13.417 [ALERT] ERROR - ---------------------------------
+2025-11-04 13:10:09.913 [ALERT] ERROR - --- INCIDENT ALERT RAISED (CRITICAL) ---
+2025-11-04 13:10:09.914 [ALERT] ERROR - Title: Unrecoverable Failure in EMAIL_SERVICE
+2025-11-04 13:10:09.914 [ALERT] ERROR - Details: Event ID e95abe2e-315c-43ab-8de7-4ff7b5c34e1e for Employee i9j1k3l5 failed all retries. Error: Resilience fallback: Email service returned: 503 SERVICE_UNAVAILABLE
+2025-11-04 13:10:09.914 [ALERT] ERROR - Timestamp: 2025-11-04 13:10:09
+2025-11-04 13:10:09.914 [ALERT] ERROR - Metadata: {dlqTimestamp=1762258209908, employeeId=i9j1k3l5, source=EMAIL_SERVICE, workShiftId=e95abe2e-315c-43ab-8de7-4ff7b5c34e1e}
+2025-11-04 13:10:09.914 [ALERT] ERROR - ---------------------------------
