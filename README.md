@@ -4,7 +4,7 @@ A robust, event-driven attendance tracking system for factory workers that ensur
 
 
 ## File Summary
-
+- **clock** - Project Root Folder
 - **architecture_diagram_siemens.drawio.png** - Architecture Diagram
 - **siemens_energy_design_doc.docx** - Design solution
 - **implementation_details_and_future_scope.docx** - Implementation details and future scope
